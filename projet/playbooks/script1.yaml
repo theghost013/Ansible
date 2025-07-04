@@ -1,0 +1,6 @@
+---
+- name: Exécuter un script shell sur machine distante
+  hosts: client1
+  tasks:
+    - name: Exécuter script1.sh
+      shell: /root/script1.sh

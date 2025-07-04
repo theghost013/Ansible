@@ -1,0 +1,4 @@
+- name: Install app - Role
+  hosts: all
+  roles:
+    - install-app

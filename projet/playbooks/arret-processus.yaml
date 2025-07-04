@@ -1,0 +1,30 @@
+---
+- name: Arrêter un processus en cours
+  hosts: client1
+  become: true
+  tasks:
+    - name: Rechercher le processus sleep
+      shell: pgrep -f "sleep 5000"
+      register: process_encours
+      ignore_errors: yes
+
+    - name: Afficher les PID trouvés
+      debug:
+        msg: "PID du processus sleep trouvé : {{ process_encours.stdout_lines }}"
+      when: process_encours.rc == 0
+
+    - name: Arrêter le processus sleep
+      shell: kill {{ item }}
+      loop: "{{ process_encours.stdout_lines }}"
+      when: process_encours.rc == 0
+      ignore_errors: yes
+
+    - name: Vérifier l'arrêt du processus
+      shell: pgrep -f "sleep 5000"
+      register: verif_processus
+      ignore_errors: yes
+
+    - name: Message de confirmation
+      debug:
+        msg: "Le processus sleep a été arrêté avec succès"
+      when: verif_processus.rc != 0

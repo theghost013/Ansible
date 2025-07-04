@@ -1,0 +1,8 @@
+- name: Modifier les permissions d'un fichier
+  hosts: ubuntu
+  tasks:
+    - name: Changer les permissions du fichier vinci
+      file:
+        path: /root/vinci
+        mode: "0666"
+        state: file

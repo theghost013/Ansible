@@ -1,0 +1,16 @@
+---
+- name: Installation et démarrage d'Apache2
+  hosts: localhost
+  become: true
+  tasks:
+    - name: Installer apache2
+      apt:
+        name: apache2
+        state: present
+        update_cache: yes
+
+    - name: Démarrer et activer apache2
+      service:
+        name: apache2
+        state: started
+        enabled: yes

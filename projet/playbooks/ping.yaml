@@ -1,0 +1,6 @@
+---
+- name: Mon premier playbook
+  hosts: localhost
+  tasks:
+    - name: Tester la connectivité
+      ping:

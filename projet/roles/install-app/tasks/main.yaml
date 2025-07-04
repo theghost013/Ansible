@@ -1,0 +1,61 @@
+- name: Update packages - Ubuntu
+  ansible.builtin.apt:
+    update_cache: true
+    upgrade: dist
+  when: ansible_facts['os_family'] == 'Debian'
+
+- name: Install Node - Ubuntu
+  ansible.builtin.apt:
+    name:
+      - nodejs
+      - npm
+    state: present
+  when: ansible_facts['os_family'] == 'Debian'
+
+- name: Update packages - Rocky
+  ansible.builtin.dnf:
+    update_cache: true
+    name: "*"
+    state: latest
+  when: ansible_facts['os_family'] == 'RedHat'
+
+- name: Execute installation script
+  ansible.builtin.shell: curl -fsSL https://rpm.nodesource.com/setup_23.x
+
+- name: Install Node - Rocky
+  ansible.builtin.dnf:
+    update_cache: true
+    name:
+      - nodejs
+      - npm
+      - git
+    state: present
+  when: ansible_facts['os_family'] == 'RedHat'
+
+- name: Clone quiz-ansible repository to /opt/quiz-ansible
+  ansible.builtin.git:
+    repo: https://github.com/franklin-tutorials/quiz-ansible.git
+    dest: "/app/quiz"
+    version: main
+
+- name: Install npm dependencies
+  ansible.builtin.command: npm install
+  args:
+    chdir: "/app/quiz"
+
+- name: Build the app with npm run build
+  ansible.builtin.command: npm run build
+  args:
+    chdir: "/app/quiz"
+
+- name: Install serve globally with npm
+  ansible.builtin.npm:
+    name: serve
+    global: yes
+    state: present
+
+- name: Start the app in background
+  ansible.builtin.shell: nohup serve -s dist &
+  args:
+    chdir: "/app/quiz"
+    creates: "/app/quiz/dist"

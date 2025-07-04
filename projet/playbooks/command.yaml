@@ -1,0 +1,6 @@
+---
+- name: Test module command avec pipe
+  hosts: client1
+  tasks:
+    - name: Utiliser command avec pipe (va échouer)
+      command: cat /etc/passwd | grep root

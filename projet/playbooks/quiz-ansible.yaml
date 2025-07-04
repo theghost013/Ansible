@@ -1,0 +1,60 @@
+---
+- name: Déployer quiz-ansible app sur Rocky Linux
+  hosts: rocky
+  become: true
+  tasks:
+    - name: Mettre à jour les paquets
+      dnf:
+        name: "*"
+        state: latest
+        update_cache: yes
+
+    - name: Installer Git
+      dnf:
+        name:
+          - git
+          - procps-ng
+        state: present
+
+    - name: Télécharger le script d'installation Node.js 23
+      get_url:
+        url: https://rpm.nodesource.com/setup_23.x
+        dest: /tmp/setup_node.sh
+        mode: "0755"
+
+    - name: Exécuter le script Node.js
+      command: bash /tmp/setup_node.sh
+
+    - name: Installer Node.js
+      dnf:
+        name: nodejs
+        state: present
+
+    - name: Cloner le dépôt de l'application
+      git:
+        repo: https://github.com/franklin-tutorials/quiz-ansible.git
+        dest: /opt/quiz-ansible
+        version: HEAD
+
+    - name: Installer les dépendances npm
+      command: npm install
+      args:
+        chdir: /opt/quiz-ansible
+
+    - name: Compiler l'application (build)
+      command: npm run build
+      args:
+        chdir: /opt/quiz-ansible
+
+    - name: Installer le serveur statique "serve"
+      npm:
+        name: serve
+        global: yes
+        state: present
+
+    - name: Lancer l'application avec "serve"
+      shell: serve -s dist -l 3000
+      args:
+        chdir: /opt/quiz-ansible
+      async: 3600
+      poll: 0

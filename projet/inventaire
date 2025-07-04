@@ -1,0 +1,14 @@
+[serveurs]
+serveur1 ansible_host=192.168.10.11 ansible_connection=ssh
+ansible_user=root
+serveur2 ansible_host=192.168.10.12 ansible_connection=ssh
+ansible_user=root
+serveur3 ansible_host=192.168.10.13 ansible_connection=winrm ansible_user=admin
+serveur4 ansible_host=192.168.10.14 ansible_connection=winrm ansible_user=admin
+[web]
+serveur3.exemple.com
+serveur4.exemple.com
+[db]
+serveur3.exemple.com
+serveur4.exemple.com
+localhost ansible_connection=localhost

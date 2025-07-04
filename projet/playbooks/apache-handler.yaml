@@ -1,0 +1,27 @@
+---
+- name: Mise à jour Apache avec handler
+  hosts: ubuntu
+  become: true
+  tasks:
+    - name: Copier le fichier index.html
+      copy:
+        content: |
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <title>Test Apache Handler</title>
+          </head>
+          <body>
+              <h1>Apache configuré avec Ansible</h1>
+              <p>Ce fichier a été déployé automatiquement.</p>
+          </body>
+          </html>
+        dest: /var/www/html/index.html
+        mode: "0644"
+      notify: Redémarrer Apache
+
+  handlers:
+    - name: Redémarrer Apache
+      service:
+        name: apache2
+        state: restarted

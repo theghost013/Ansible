@@ -1,0 +1,19 @@
+---
+- name: Gérer le service apache2
+  hosts: all
+  tasks:
+    - name: Vérifier si apache2 est installé
+      ansible.builtin.package_facts:
+        manager: apt
+
+    - name: Installer apache2 si nécessaire
+      ansible.builtin.apt:
+        name: apache2
+        state: present
+      when: "'apache2' not in ansible_facts.packages"
+
+    - name: Démarrer le service apache2
+      ansible.builtin.service:
+        name: apache2
+        state: started
+        enabled: yes

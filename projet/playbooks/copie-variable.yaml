@@ -1,0 +1,17 @@
+---
+- name: Copier un fichier vers machines clientes avec variables
+  hosts: all
+  vars:
+    source_file: /root/sdv.conf
+    dest_path: /tmp
+    file_owner: root
+    file_group: root
+    file_mode: "0755"
+  tasks:
+    - name: Copie du fichier avec variables
+      ansible.builtin.copy:
+        src: "{{ source_file }}"
+        dest: "{{ dest_path }}"
+        owner: "{{ file_owner }}"
+        group: "{{ file_group }}"
+        mode: "{{ file_mode }}"

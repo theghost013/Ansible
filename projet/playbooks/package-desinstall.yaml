@@ -1,0 +1,25 @@
+---
+- name: Désinstaller des paquets selon l'OS
+  hosts: all
+  become: true
+  vars:
+    paquets_a_desinstaller:
+      - telnet
+      - curl
+      - wget
+  tasks:
+    - name: Désinstaller les paquets sur Debian/Ubuntu
+      apt:
+        name: "{{ item }}"
+        state: absent
+        purge: yes
+        autoremove: yes
+      loop: "{{ paquets_a_desinstaller }}"
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Désinstaller les paquets sur RedHat/Rocky
+      yum:
+        name: "{{ item }}"
+        state: absent
+      loop: "{{ paquets_a_desinstaller }}"
+      when: ansible_facts['os_family'] == "RedHat"

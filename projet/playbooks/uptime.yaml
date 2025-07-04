@@ -1,0 +1,11 @@
+---
+- name: Afficher l'état d'activité des machines distantes
+  hosts: ubuntu
+  tasks:
+    - name: Exécuter la commande uptime
+      ansible.builtin.command: uptime
+      register: uptime_result
+
+    - name: Afficher le résultat uptime
+      ansible.builtin.debug:
+        var: uptime_result.stdout

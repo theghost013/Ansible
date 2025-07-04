@@ -1,0 +1,6 @@
+---
+- name: Transférer et exécuter un script
+  hosts: all
+  tasks:
+    - name: Transférer et exécuter script2.sh
+      script: /root/script2.sh

@@ -1,0 +1,10 @@
+---
+- name: Test de connexion SSH vers machines distantes
+  hosts: all
+  tasks:
+    - name: Tester la connectivité avec ping
+      ping:
+
+    - name: Afficher des informations système
+      debug:
+        msg: "Connecté à {{ inventory_hostname }} - {{ ansible_distribution }} {{ ansible_distribution_version }}"

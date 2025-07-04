@@ -1,0 +1,12 @@
+---
+- name: Créer un utilisateur
+  hosts: all
+  become: true
+  tasks:
+    - name: Créer l'utilisateur pierre
+      user:
+        name: pierre
+        home: /home/pierre
+        shell: /bin/bash
+        create_home: yes
+        state: present

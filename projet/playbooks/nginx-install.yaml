@@ -1,0 +1,23 @@
+---
+- name: Installer Nginx selon l'OS
+  hosts: all
+  become: true
+  tasks:
+    - name: Installer Nginx sur Debian/Ubuntu
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Installer Nginx sur RedHat/Rocky/SUSE
+      yum:
+        name: nginx
+        state: present
+      when: ansible_facts['os_family'] == "RedHat" or ansible_facts['os_family'] == "Suse"
+
+    - name: Démarrer et activer Nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes

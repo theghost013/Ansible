@@ -1,0 +1,28 @@
+---
+- name: Planifier une tâche cron
+  hosts: client1
+  become: true
+  tasks:
+    - name: Mettre à jour la liste des paquets
+      apt:
+        update_cache: yes
+
+    - name: Installer le paquet cron
+      apt:
+        name: cron
+        state: present
+
+    - name: Démarrer le service cron
+      service:
+        name: cron
+        state: started
+        enabled: yes
+
+    - name: Planifier l'exécution du script tous les lundis à 15h10
+      cron:
+        name: "Exécution script1"
+        minute: "10"
+        hour: "15"
+        weekday: "1"
+        job: "/root/script1.sh"
+        user: root

@@ -1,0 +1,10 @@
+---
+- name: Ajouter mot de passe à l'utilisateur pierre
+  hosts: all
+  become: true
+  tasks:
+    - name: Définir le mot de passe pour pierre
+      user:
+        name: pierre
+        password: "{{ newpass | password_hash('sha512') }}"
+        state: present
